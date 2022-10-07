@@ -1,15 +1,43 @@
 version: '3.3'
 
 services:
+  db: 
+        image: mysql:8
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'simple_cms_development'
+            # So you don't have to use root, but you can if you like
+            MYSQL_USER: 'badrri'
+            # You can use whatever password you like
+            MYSQL_PASSWORD: 'password@123'
+            # Password for root access
+            MYSQL_ROOT_PASSWORD: 'password123'
+        ports:
+            - "3306:3307"
+        volumes:
+            - my-rails-db:/var/lib/mysql
   my_rails_app:
     container_name: backend
-    build: ./
+    build: .
+    # once app is ready uncomment the below command
+    # command: bash -c "bundle install; rails s -b '0.0.0.0'"
     volumes:
       - ./:/usr/src/app
     working_dir: /usr/src/app
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t
+    environment:
+      DATABASE_URL: 'mysql2://db'
+      RAILS_ENV: 'development'
+    depends_on:
+        - db
+    links:
+        - db
     ports:
         - "3000:3000"
         - "1234:1234"
         - "26162:26162"
+    # once app is ready comment the below two lines
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+# Names our volume
+volumes:
+  my-rails-db:
