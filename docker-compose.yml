@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  my_rails_app:
+    container_name: backend
+    build: ./
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    ports:
+        - "3000:3000"
+        - "1234:1234"
+        - "26162:26162"
