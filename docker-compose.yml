@@ -18,12 +18,12 @@ services:
             - my-rails-db:/var/lib/mysql
   my_rails_app:
     container_name: backend
-    build: ./
+    build: .
+    # once app is ready uncomment the below command
+    # command: bash -c "bundle install; rails s -b '0.0.0.0'"
     volumes:
       - ./:/usr/src/app
     working_dir: /usr/src/app
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t
     environment:
       DATABASE_URL: 'mysql2://db'
       RAILS_ENV: 'development'
@@ -35,6 +35,9 @@ services:
         - "3000:3000"
         - "1234:1234"
         - "26162:26162"
+    # once app is ready comment the below two lines
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
 # Names our volume
 volumes:
   my-rails-db:
